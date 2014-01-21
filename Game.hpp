@@ -10,6 +10,12 @@ class Game {
         void Load(const std::string& filename);
         void Print();
         void Solve();
+        std::vector<int> GetColumn(int i);
+        std::vector<int> GetRow(int i);
+        std::vector<int> GetBlock(int i);
+        std::vector<int> EmptyEntries();
+        std::vector<int> Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c);
+        std::vector<int> Intercept(std::vector<int> a, std::vector<int> b);
     private:
         std::vector<int> entries;
         int size;

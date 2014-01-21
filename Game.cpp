@@ -96,12 +96,16 @@ void Game::Solve() {
     std::vector<int> empties = EmptyEntries();
     int sqrtsize = sqrt(size);
     for(const auto& entry : empties) {
-        int x = entry%size;
+        /*int x = entry%size;
         int y = entry/size;
         int block = (x/sqrtsize)*sqrtsize+y/sqrtsize;
         std::cout << GetColumn(x) << std::endl;
         std::cout << GetRow(y) << std::endl;
-        std::cout << GetBlock(block) << std::endl;
+        std::cout << GetBlock(block) << std::endl;*/
+        //TODO: Actually solve the game
+        // With exact cover find the possibilities for entries
+        // Idea: For all empties, sort them in order of how many possibilities
+        // the field has. Then start with the smallest first.
 
     }
 }

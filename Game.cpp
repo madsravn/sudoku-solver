@@ -24,7 +24,7 @@ Game::Game(int gamesize):size(gamesize*gamesize) {
 
 }
 
-
+// Standard Sudoku game.
 Game::Game() {
     size = 3*3;
 }
@@ -69,26 +69,38 @@ Game::EmptyEntries() {
 }
 
 std::vector<int>
-Game::Intercept(std::vector<int> a, std::vector<int> b) {
-    std::vector<int> elems;
-    elems.insert(elems.end(), a.begin(), a.end());
-    elems.insert(elems.end(), b.begin(), b.end());
-    std::sort(elems.begin(), elems.end());
-    std::vector<int>::iterator it = std::unique(elems.begin(), elems.end());
-    std::vector<int> ret;
-    ret.insert(ret.end(), it, elems.end());
+Game::Intersect(std::vector<int> a, std::vector<int> b) {
+	std::sort(a.begin(), a.end());
+	std::sort(b.begin(), b.end());
+	std::vector<int> ret;
+	std::set_intersection(a.begin(), a.end(), b.begin(), b.end(), std::back_inserter(ret));
     return ret;
 
 }
 
 std::vector<int>
+Game::Inverse(std::vector<int> a) {
+	std::vector<int> elems{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	for (const auto& e : a) {
+		const auto iter = std::find(elems.begin(), elems.end(), e);
+		if (iter != elems.end()) {
+			elems.erase(iter);
+		}
+	}
+	return elems;
+}
+
+std::vector<int>
 Game::Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
     std::vector<int> ret;
+	// Remove zero from all entries
     a.erase(std::remove_if(a.begin(), a.end(), [](int x){return x==0;}),a.end());
     b.erase(std::remove_if(b.begin(), b.end(), [](int x){return x==0;}),b.end());
     c.erase(std::remove_if(c.begin(), c.end(), [](int x){return x==0;}),c.end());
-    ret = Intercept(a,b);
-    ret = Intercept(ret,c);
+	std::cout << a << std::endl;
+	std::cout << Inverse(a) << std::endl;
+    ret = Intersect(Inverse(a),Inverse(b));
+    ret = Intersect(ret,Inverse(c));
     return ret;
 }
 
@@ -108,6 +120,19 @@ void Game::Solve() {
         // the field has. Then start with the smallest first.
 
     }
+	const int pos = 5;
+	int y = pos / size;
+	int x = pos % size;
+	int block = (x / sqrtsize)*sqrtsize + y / sqrtsize;
+
+	std::cout << GetColumn(x) << std::endl;
+	std::cout << GetRow(y) << std::endl;
+	std::cout << GetBlock(block) << std::endl;
+
+	std::cout << Intercept3(GetColumn(x), GetRow(y), GetBlock(block)) << std::endl;
+	
+
+
 }
     
 

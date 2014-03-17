@@ -97,8 +97,6 @@ Game::Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
     a.erase(std::remove_if(a.begin(), a.end(), [](int x){return x==0;}),a.end());
     b.erase(std::remove_if(b.begin(), b.end(), [](int x){return x==0;}),b.end());
     c.erase(std::remove_if(c.begin(), c.end(), [](int x){return x==0;}),c.end());
-	std::cout << a << std::endl;
-	std::cout << Inverse(a) << std::endl;
     ret = Intersect(Inverse(a),Inverse(b));
     ret = Intersect(ret,Inverse(c));
     return ret;

@@ -5,6 +5,7 @@
 #include "Game.hpp"
 
 
+// Pretty printing of vectors.
 template <class T>
 inline std::ostream& operator << (std::ostream& os, const std::vector<T>& v) 
 {
@@ -21,14 +22,16 @@ inline std::ostream& operator << (std::ostream& os, const std::vector<T>& v)
 // Size describes what size one block has
 // A normal sudoku has size 3: 3*3 blocks - 3 wide and 3 high
 Game::Game(int gamesize):size(gamesize*gamesize) {
+	size = 3 * 3;
 
 }
 
-// Standard Sudoku game.
+// Standard Sudoku game - currently the only option working.
 Game::Game() {
     size = 3*3;
 }
 
+// Loads the game from a file.
 void Game::Load(const std::string& filename) {
     // Load the game into the game vector
     std::ifstream file;
@@ -47,6 +50,7 @@ void Game::Load(const std::string& filename) {
     file.close();
 }
 
+// Prints the game to standard out.
 void Game::Print() {
     for(unsigned i = 0; i < entries.size(); ++i) {
         if(i > 0 && i%size == 0) {
@@ -57,6 +61,7 @@ void Game::Print() {
     std::cout << std::endl;
 }
 
+// Find all entries which are 0 from a specified location.
 std::vector<int>
 Game::EmptyEntries(int from) {
     std::vector<int> ret;
@@ -68,6 +73,7 @@ Game::EmptyEntries(int from) {
     return ret;
 }
 
+// Finds the intersection betweem two vectors.
 std::vector<int>
 Game::Intersect(std::vector<int> a, std::vector<int> b) {
 	std::sort(a.begin(), a.end());
@@ -78,6 +84,7 @@ Game::Intersect(std::vector<int> a, std::vector<int> b) {
 
 }
 
+// Inverse a list of elements in the set of [1-9]
 std::vector<int>
 Game::Inverse(std::vector<int> a) {
 	std::vector<int> elems{ 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -90,8 +97,9 @@ Game::Inverse(std::vector<int> a) {
 	return elems;
 }
 
+// Finds the intersection between three vectors.
 std::vector<int>
-Game::Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
+Game::Intersect3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
     std::vector<int> ret;
 	// Remove zero from all entries
     a.erase(std::remove_if(a.begin(), a.end(), [](int x){return x==0;}),a.end());
@@ -102,6 +110,7 @@ Game::Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
     return ret;
 }
 
+// Check if the game has been completed.
 bool Game::IsComplete() {
 	for (const auto& e : entries) {
 		if (e == 0) {
@@ -111,6 +120,8 @@ bool Game::IsComplete() {
 	return true;
 }
 
+// Solving the game from a specified location.
+// Call with 0 in order to solve the entire game.
 void Game::Solve(int from) {
 
 	// TODO: No need to recreate this list constantly. Create it and then just cut out from it.
@@ -128,7 +139,7 @@ void Game::Solve(int from) {
         int y = entry/size;
         int block = (x/sqrtsize)*sqrtsize+y/sqrtsize;
 
-		std::vector<int> possibilities = Intercept3(GetColumn(x), GetRow(y), GetBlock(block));
+		std::vector<int> possibilities = Intersect3(GetColumn(x), GetRow(y), GetBlock(block));
 
 		if (possibilities.size() == 0) {
 			entries.at(entry) = 0;

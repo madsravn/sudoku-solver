@@ -14,7 +14,7 @@ class Game {
         std::vector<int> GetRow(int i);
         std::vector<int> GetBlock(int i);
         std::vector<int> EmptyEntries(int from);
-        std::vector<int> Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c);
+        std::vector<int> Intersect3(std::vector<int> a, std::vector<int> b, std::vector<int> c);
         std::vector<int> Intersect(std::vector<int> a, std::vector<int> b);
 		bool IsComplete();
 		std::vector<int> Inverse(std::vector<int> a);

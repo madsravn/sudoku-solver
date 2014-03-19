@@ -48,7 +48,7 @@ void Game::Load(const std::string& filename) {
 }
 
 void Game::Print() {
-    for(int i = 0; i < entries.size(); ++i) {
+    for(unsigned i = 0; i < entries.size(); ++i) {
         if(i > 0 && i%size == 0) {
             std::cout << std::endl;
         }
@@ -58,9 +58,9 @@ void Game::Print() {
 }
 
 std::vector<int>
-Game::EmptyEntries() {
+Game::EmptyEntries(int from) {
     std::vector<int> ret;
-    for(int i = 0; i < entries.size(); ++i) {
+    for(unsigned i = from; i < entries.size(); ++i) {
         if(entries.at(i) == 0) {
             ret.push_back(i);
         }
@@ -102,35 +102,45 @@ Game::Intercept3(std::vector<int> a, std::vector<int> b, std::vector<int> c) {
     return ret;
 }
 
-void Game::Solve() {
-    std::vector<int> empties = EmptyEntries();
-    int sqrtsize = sqrt(size);
+bool Game::IsComplete() {
+	for (const auto& e : entries) {
+		if (e == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void Game::Solve(int from) {
+
+	// TODO: No need to recreate this list constantly. Create it and then just cut out from it.
+    std::vector<int> empties = EmptyEntries(from);
+    int sqrtsize = (int)sqrt(size);
+
+	if (IsComplete()) {
+		std::cout << "THIS IS A SOLUTION: " << std::endl;
+		Print();
+		std::cout << std::endl << std::endl;
+	}
+
     for(const auto& entry : empties) {
-        /*int x = entry%size;
+        int x = entry%size;
         int y = entry/size;
         int block = (x/sqrtsize)*sqrtsize+y/sqrtsize;
-        std::cout << GetColumn(x) << std::endl;
-        std::cout << GetRow(y) << std::endl;
-        std::cout << GetBlock(block) << std::endl;*/
-        //TODO: Actually solve the game
-        // With exact cover find the possibilities for entries
-        // Idea: For all empties, sort them in order of how many possibilities
-        // the field has. Then start with the smallest first.
 
+		std::vector<int> possibilities = Intercept3(GetColumn(x), GetRow(y), GetBlock(block));
+
+		if (possibilities.size() == 0) {
+			entries.at(entry) = 0;
+			return;
+		}
+		for (unsigned i = 0; i < possibilities.size(); ++i) {
+			entries.at(entry) = possibilities.at(i);
+			Solve(entry);
+		}
+		entries.at(entry) = 0;
+		return;
     }
-	const int pos = 5;
-	int y = pos / size;
-	int x = pos % size;
-	int block = (x / sqrtsize)*sqrtsize + y / sqrtsize;
-
-	std::cout << GetColumn(x) << std::endl;
-	std::cout << GetRow(y) << std::endl;
-	std::cout << GetBlock(block) << std::endl;
-
-	std::cout << Intercept3(GetColumn(x), GetRow(y), GetBlock(block)) << std::endl;
-	
-
-
 }
     
 
@@ -158,11 +168,13 @@ Game::GetRow(int i) {
     return ret;
 }
 
+// TODO: Are we doing redundant stuff here?
+
 // i is 0-indexed.
 std::vector<int>
 Game::GetBlock(int i) {
     std::vector<int> ret;
-    int sqrtsize = sqrt(size);
+    int sqrtsize = (int)sqrt(size);
     int x = i/sqrtsize;
     int y = i%sqrtsize;
     std::vector<std::vector<int>> rows;

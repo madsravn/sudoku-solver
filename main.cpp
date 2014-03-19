@@ -6,7 +6,7 @@ int main() {
     // Let's play a game of sudoku
     
     Game g;
-    g.Load("game2.txt");
+    g.Load("game3.txt");
     g.Print();
 
     g.Solve();

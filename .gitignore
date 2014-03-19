@@ -1,4 +1,9 @@
 *.swp
 *.o
 
+*.opensdf
+*.mdf
+*sdf
+*.sdf
+
 sudoku

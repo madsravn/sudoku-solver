@@ -61,7 +61,7 @@ void Game::Print() {
     std::cout << std::endl;
 }
 
-// Find all entries which are 0 from a specified location.
+// Finds all entries which are 0 from a specified location.
 std::vector<int>
 Game::EmptyEntries(int from) {
     std::vector<int> ret;

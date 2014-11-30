@@ -7,6 +7,7 @@ class Game {
     public:
         Game();
         Game(int gamesize);
+        Game(int gamesize, std::vector<int> entr);
         void Load(const std::string& filename);
         void Print();
         void Solve(int from = 0);
@@ -17,11 +18,15 @@ class Game {
         std::vector<int> Intersect3(std::vector<int> a, std::vector<int> b, std::vector<int> c);
         std::vector<int> Intersect(std::vector<int> a, std::vector<int> b);
 		bool IsComplete();
+        std::vector<Game> GetSolutions();
 		std::vector<int> Inverse(std::vector<int> a);
+
     private:
         std::vector<int> entries;
         int size;
-
+        bool isSolved;
+        std::vector<Game> solutions;
+        
 };
 
 

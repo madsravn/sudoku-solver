@@ -9,8 +9,12 @@ int main() {
     g.Load("game3.txt");
     g.Print();
 
-    g.Solve();
+    //g.Solve();
+
+    //g.Print();
     
+    auto solutions = g.GetSolutions();
+    std::cout << solutions.size() << std::endl;
     
     return 0;
 }

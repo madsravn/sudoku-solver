@@ -23,13 +23,17 @@ inline std::ostream& operator << (std::ostream& os, const std::vector<T>& v)
 // A normal sudoku has size 3: 3*3 blocks - 3 wide and 3 high
 Game::Game(int gamesize):size(gamesize*gamesize) {
 	size = 3 * 3;
+    isSolved = false;
 
 }
 
 // Standard Sudoku game - currently the only option working.
 Game::Game() {
     size = 3*3;
+    isSolved = false;
 }
+
+Game::Game(int gamesize, std::vector<int> entr): size(gamesize), entries(entr), isSolved(false) {}
 
 // Loads the game from a file.
 void Game::Load(const std::string& filename) {
@@ -48,6 +52,15 @@ void Game::Load(const std::string& filename) {
         entries.push_back(value);
     }
     file.close();
+    isSolved = false;
+}
+
+std::vector<Game>
+Game::GetSolutions() {
+    if(!isSolved) {
+        Solve();
+    }
+    return solutions;
 }
 
 // Prints the game to standard out.
@@ -129,6 +142,8 @@ void Game::Solve(int from) {
     int sqrtsize = (int)sqrt(size);
 
 	if (IsComplete()) {
+        solutions.push_back(Game(size, entries));
+        isSolved = true;
 		std::cout << "THIS IS A SOLUTION: " << std::endl;
 		Print();
 		std::cout << std::endl << std::endl;
